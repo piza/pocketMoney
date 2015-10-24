@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+
+    <properties resource="config.properties" />
+    <classPathEntry location="/Users/hong/Desktop/sharelibs/mysql-connector-java-5.1.11.jar"/>
+    <context id="defaultContext">
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://123.56.134.63:3306/portal_db?useUnicode=true&amp;characterEncoding=utf-8" userId="portal" password="portal123" />
+        <javaModelGenerator targetPackage="com.piza.model" targetProject="${outputPath}/src/" />
+        <sqlMapGenerator targetPackage="orm" targetProject="${outputPath}/resources/" />
+        <!--<javaClientGenerator targetPackage="com.piza.dao" targetProject="${outputPath}/src/" type="XMLMAPPER" />-->
+
+        <table schema="portal_db" tableName="weixin_account" domainObjectName="WeixinAccount">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+    </context>
+</generatorConfiguration>
