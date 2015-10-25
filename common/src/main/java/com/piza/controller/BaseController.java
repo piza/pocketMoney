@@ -2,6 +2,7 @@ package com.piza.controller;
 
 import com.piza.bean.ErrorBean;
 import com.piza.bean.PagingProperties;
+import com.piza.enums.ErrorTypeEnum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,11 +28,11 @@ public class BaseController{
 	}
 
 
-    protected  Map<String,Object> failedResult(Integer errorType,String value){
+    protected  Map<String,Object> failedResult(ErrorTypeEnum errorType,String value){
 			
         Map<String,Object> result=new HashMap<String,Object>();
         ErrorBean errorBean=new ErrorBean();
-        errorBean.setErrorType(errorType);
+        errorBean.setErrorType(errorType.getValue());
         errorBean.setErrorMesg(value);
         result.put("failed",errorBean );
         return result;

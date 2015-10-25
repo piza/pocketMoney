@@ -28,11 +28,18 @@ public class ServiceGenerator implements ProgressCallback {
     private String modelPackage="";
     private String daoPackage="";
     private String servicePackage="";
+    private String validatorPackage="";
+    private String controllerPackage="";
+
     private VelocityContext context;
     private VelocityEngine ve;
     private Template mapperTemplate;
     private Template serviceTemplate;
     private Template implTemplate;
+    private Template validatorTemplate;
+    private Template controllerTemplate;
+
+
     public ServiceGenerator(Properties properties,Configuration config){
         this.properties=properties;
         this.config=config;
@@ -41,10 +48,14 @@ public class ServiceGenerator implements ProgressCallback {
         modelPackage=properties.getProperty("basePackage")+".model";
         daoPackage=properties.getProperty("basePackage")+".dao";
         servicePackage=properties.getProperty("basePackage")+".service";
+        validatorPackage=properties.getProperty("basePackage")+".validator";
+        controllerPackage=properties.getProperty("basePackage")+".controller";
         context = new VelocityContext();
         context.put("modelPackage",modelPackage );
         context.put("daoPackage", daoPackage);
         context.put("servicePackage",servicePackage);
+        context.put("validatorPackage",validatorPackage);
+        context.put("controllerPackage",controllerPackage);
 
         ve = new VelocityEngine();
         ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
@@ -53,8 +64,8 @@ public class ServiceGenerator implements ProgressCallback {
         mapperTemplate = ve.getTemplate("mapperTemplate.vm");
         serviceTemplate = ve.getTemplate("serviceTemplate.vm");
         implTemplate = ve.getTemplate("serviceImplTemplate.vm");
-
-
+        validatorTemplate = ve.getTemplate("validatorTemplate.vm");
+        controllerTemplate = ve.getTemplate("controllerTemplate.vm");
 
     }
     @Override
@@ -83,6 +94,15 @@ public class ServiceGenerator implements ProgressCallback {
             File serviceImplFolder=new File(baseOutputPath+File.separator+"service"+File.separator+"impl");
             if(!serviceImplFolder.exists()){
                 serviceImplFolder.mkdirs();
+            }
+
+            File validatorFolder=new File(baseOutputPath+File.separator+"validator");
+            if(!validatorFolder.exists()){
+                validatorFolder.mkdirs();
+            }
+            File controllerFolder=new File(baseOutputPath+File.separator+"controller");
+            if(!controllerFolder.exists()){
+                controllerFolder.mkdirs();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -124,11 +144,17 @@ public class ServiceGenerator implements ProgressCallback {
             }
         }
     }
+    private String lowFirstChar(String tempStr){
+        char[] cs=tempStr.toCharArray();
+        cs[0]+=32;
+        return String.valueOf(cs);
+    }
 
     private void generateFile(String modelClass){
 
         try {
             context.put("modelClass", modelClass);
+            context.put("modelClassParam", lowFirstChar(modelClass));
 
             FileWriter mapperWriter=new FileWriter(baseOutputPath+File.separator+"dao"+File.separator+modelClass+"Mapper.java");
             mapperTemplate.merge(context, mapperWriter);
@@ -145,6 +171,16 @@ public class ServiceGenerator implements ProgressCallback {
             implTemplate.merge(context,implFileWriter);
             implFileWriter.flush();
             implFileWriter.close();
+
+            FileWriter validatorWriter=new FileWriter(baseOutputPath+File.separator+"validator"+File.separator+modelClass+"Validator.java");
+            validatorTemplate.merge(context, validatorWriter);
+            validatorWriter.flush();
+            validatorWriter.close();
+
+            FileWriter controllerWriter=new FileWriter(baseOutputPath+File.separator+"controller"+File.separator+modelClass+"Controller.java");
+            controllerTemplate.merge(context, controllerWriter);
+            controllerWriter.flush();
+            controllerWriter.close();
 
 
         } catch (Exception ex) {

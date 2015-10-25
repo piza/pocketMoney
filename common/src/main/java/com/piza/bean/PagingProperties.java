@@ -35,6 +35,10 @@ public class PagingProperties {
 			return (page-1)*perPage;
 		}
 	}
+
+    public String build(){
+        return " limit "+this.getStart()+","+this.getPerPage();
+    }
 	@Override
 	public String toString() {
 		return "PagingProperties [page=" + page + ", perPage=" + perPage
