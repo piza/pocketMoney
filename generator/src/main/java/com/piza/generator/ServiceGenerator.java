@@ -83,7 +83,7 @@ public class ServiceGenerator implements ProgressCallback {
             resFolder.mkdirs();
             File srcFolder=new File(outputRootPath+File.separator+"src");
             FileUtils.deleteDirectory(srcFolder);
-            File daoFolder=new File(baseOutputPath+File.separator+"dao");
+            File daoFolder=new File(baseOutputPath+File.separator+"dao1");
             if(!daoFolder.exists()){
                 daoFolder.mkdirs();
             }
@@ -156,7 +156,7 @@ public class ServiceGenerator implements ProgressCallback {
             context.put("modelClass", modelClass);
             context.put("modelClassParam", lowFirstChar(modelClass));
 
-            FileWriter mapperWriter=new FileWriter(baseOutputPath+File.separator+"dao"+File.separator+modelClass+"Mapper.java");
+            FileWriter mapperWriter=new FileWriter(baseOutputPath+File.separator+"dao1"+File.separator+modelClass+"Mapper.java");
             mapperTemplate.merge(context, mapperWriter);
             mapperWriter.flush();
             mapperWriter.close();

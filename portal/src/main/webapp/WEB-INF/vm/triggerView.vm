@@ -1,0 +1,50 @@
+<script type="text/template" id="trigger-view">
+    <div>
+    </div>
+</script>
+#[[
+<script type="text/javascript">
+
+    define('modules/TriggerModule',['backbone'], function(Backbone){
+        var TriggerModule = Backbone.View.extend({
+            template: _.template($("#trigger-view").html()),
+            events:{
+                'keydown #englishInpt':"englishToChinese"
+            },
+            initialize:function(){
+
+            },
+            render:function(){
+                this.$el.html(this.template());
+            },
+            englishToChinese:function(evt){
+                var srcText=this.$("#englishInpt").val();
+                if(srcText.length<1){
+                    return;
+                }
+                var that=this;
+                if(evt.keyCode == 13){
+                    $.ajax({
+                        type: "get",
+                        async: false,
+                        url: "http://fanyi.youdao.com/openapi.do?keyfrom=pizahouse&key=1517817920&type=data&doctype=jsonp&callback=handleResult&version=1.1&q="+srcText,
+                        dataType: "jsonp",
+                        jsonp: "callback",
+                        jsonpCallback:"handleResult",
+                        success: function(json){
+                            if(json.errorCode == 0){
+                                that.$("#chineseShow").val(json.translation.toString());
+                            }
+                        },
+                        error: function(){
+                            alert('fail');
+                        }
+                    });
+                }
+            }
+        });
+
+        return TriggerModule;
+    });
+</script>
+]]#

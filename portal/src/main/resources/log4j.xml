@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- Appenders -->
+
+    <!-- Console log -->
+        <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+          <layout class="org.apache.log4j.PatternLayout">
+           <param name="ConversionPattern" value="%d [%t] %p - %m%n" />
+          </layout>
+          <filter class="org.apache.log4j.varia.LevelRangeFilter">
+           <!--<param name="LevelMin" value="INFO" />-->
+           <param name="LevelMax" value="FATAL" />
+          </filter>
+         </appender>
+
+        <!-- Normal log:  [DEBUG->WARN]         -->
+        <appender name="Access" class="org.apache.log4j.RollingFileAppender">
+          <param name="File" value="${catalina.base}/logs/yijian_operate_debug.log" />
+          <param name="Append" value="true" />
+          <param name="MaxFileSize" value="10MB" />
+          <param name="MaxBackupIndex" value="2" />
+          <param name="Threshold" value="DEBUG" />
+          <layout class="org.apache.log4j.PatternLayout">
+           <param name="ConversionPattern"
+            value="%d [%t] %p - %m%n" />
+          </layout>
+          <filter class="org.apache.log4j.varia.LevelRangeFilter">
+           <param name="LevelMin" value="DEBUG" />
+           <param name="LevelMax" value="WARN" />
+           <param name="AcceptOnMatch" value="true" />
+          </filter>
+         </appender>
+
+        <appender name="Info" class="org.apache.log4j.RollingFileAppender">
+            <param name="Append" value="true" />
+            <param name="File" value="${catalina.base}/logs/product/yijian_operate_info.log" />
+            <param name="MaxFileSize" value="100MB" />
+            <param name="MaxBackupIndex" value="20" />
+            <layout class="org.apache.log4j.PatternLayout">
+                <param name="ConversionPattern" value="%d [%t] %p - %m%n" />
+            </layout>
+            <filter class="org.apache.log4j.varia.LevelRangeFilter">
+                <param name="LevelMin" value="INFO" />
+                <param name="LevelMax" value="INFO" />
+                <param name="AcceptOnMatch" value="true" />
+            </filter>
+        </appender>
+
+
+        <!-- ERORR LOG: [ERROR->FATAL] -->
+         <appender name="Error" class="org.apache.log4j.RollingFileAppender">
+          <param name="Append" value="true" />
+          <param name="File" value="${catalina.base}/logs/yijian_operate_error.log" />
+          <param name="MaxFileSize" value="1024" />
+          <param name="MaxBackupIndex" value="10" />
+          <layout class="org.apache.log4j.PatternLayout">
+           <param name="ConversionPattern" value="%d [%t] %p - %m%n" />
+          </layout>
+          <filter class="org.apache.log4j.varia.LevelRangeFilter">
+           <param name="LevelMin" value="ERROR" />
+           <param name="LevelMax" value="ERROR" />
+           <param name="AcceptOnMatch" value="true" />
+          </filter>
+         </appender>
+
+        <!-- ========================================================================================== -->
+        <!-- trace < debug < info < warn < error < fatal < off -->
+        <!-- ========================================================================================== -->
+        <!-- 3rdparty Loggers -->
+        <logger name="org.springframework">
+                <level value="off" />
+        </logger>
+        <logger name="com.mchange">
+                <level value="off" />
+        </logger>
+
+        <!--&lt;!&ndash; ibatis log start&ndash;&gt;-->
+        <!--<appender name="IBatis" class="org.apache.log4j.ConsoleAppender">-->
+                <!--<layout class="org.apache.log4j.PatternLayout">-->
+                        <!--<param name="ConversionPattern" value="%-4r [%t] %-5p %c %x - %m%n" />-->
+                <!--</layout>-->
+                <!--<filter class="org.apache.log4j.varia.LevelRangeFilter">-->
+                        <!--<param name="LevelMin" value="DEBUG" />-->
+                        <!--<param name="LevelMax" value="DEBUG" />-->
+                <!--</filter>-->
+        <!--</appender>-->
+        <!--<logger name="org.apache.ibatis" additivity="true">-->
+          <!--<level value="debug" />-->
+            <!--<appender-ref ref="IBatis" />-->
+         <!--</logger>-->
+         <!--<logger name="java.sql.Connection" additivity="true">-->
+          <!--<level value="debug" />-->
+             <!--<appender-ref ref="IBatis" />-->
+         <!--</logger>-->
+         <!--<logger name="java.sql.Statement" additivity="true">-->
+          <!--<level value="debug" />-->
+             <!--<appender-ref ref="IBatis" />-->
+         <!--</logger>-->
+        <!--<logger name="org.mybatis.spring" additivity="true">-->
+            <!--<level value="debug" />-->
+            <!--<appender-ref ref="IBatis" />-->
+        <!--</logger>-->
+         <!--<logger name="java.sql.PreparedStatement" additivity="true">-->
+          <!--<level value="debug" />-->
+          <!--<appender-ref ref="IBatis" />-->
+         <!--</logger>-->
+         <!--<logger name="java.sql.ResultSet" additivity="true">-->
+          <!--<level value="debug" />-->
+          <!--<appender-ref ref="IBatis" />-->
+         <!--</logger>-->
+      <!-- ibatis end -->
+
+    <!-- Root Logger -->
+    <root>
+                <priority value="info" />
+                <!--<appender-ref ref="STDOUT" />-->
+                <appender-ref ref="Access" />
+                <appender-ref ref="Error" />
+    </root>
+
+</log4j:configuration>

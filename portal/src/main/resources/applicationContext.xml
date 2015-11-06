@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+                           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+	<context:component-scan base-package="com.piza.service" />
+    <context:component-scan base-package="com.piza.listener" />
+    <context:component-scan base-package="com.piza.util" />
+
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+                <value>classpath:message.properties</value>
+			</list>
+        </property>
+    </bean>
+	 <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="properties" ref="configProperties" />
+    </bean>
+	
+    
+	<!-- All class in the back-package are auto loaded as a service -->
+	<!--<context:component-scan base-package="com.yuting.yijian" >-->
+		<!--<context:include-filter type="regex" expression=".service.impl.frontend.*"/>-->
+		<!--<context:include-filter type="regex" expression=".listener.frontend.*"/>-->
+	<!--</context:component-scan>-->
+
+        
+	<!-- DataSource configuration -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${driver}" />
+		<property name="jdbcUrl" value="${jdbcurl}" />
+		<property name="user" value="${username}" />
+		<property name="password" value="${password}" />
+		<property name="maxPoolSize" value="${maxpoolsize}" />
+		<property name="initialPoolSize" value="${initialpoolsize}" />
+		<property name="maxIdleTime" value="7200"></property>
+		<property name="acquireRetryDelay" value="1000"></property>
+		<property name="breakAfterAcquireFailure" value="false"></property> 
+		<property name="acquireRetryAttempts" value="3" />
+		<property name="minPoolSize" value="${minpoolsize}" />
+        <property name="testConnectionOnCheckin" value="true"/>
+        <property name="idleConnectionTestPeriod" value="60" />
+    </bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
+		  p:dataSource-ref="dataSource" />
+
+	
+	<!-- Cache -->
+	<cache:annotation-driven cache-manager="cacheManager"/>	
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean
+					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+					p:name="default" />
+				<bean
+					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+					p:name="andCache" />
+			</set>
+		</property>
+	</bean> 
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath*:orm/*.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- manage transaction -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<!-- Mabatis Data Layer -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	 <!--all class in the back-package are auto loaded as a mapper-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.piza.dao" />
+	</bean>
+
+	<!-- For file upload -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+         <property name="maxUploadSize" value="30109996"/>
+   		 <property name="defaultEncoding" value="UTF-8" />
+    </bean>
+	<task:annotation-driven/>
+    <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="mappingJacksonHttpMessageConverter" /><!-- json转换器 -->
+            </list>
+        </property>
+    </bean>
+
+
+</beans>

@@ -1,0 +1,17 @@
+.full_modal{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 10000;
+    background-color: white;
+}
+.middle-float{
+   position: fixed;
+   top:100px;
+}
+.search-hint-list{
+    position: fixed;
+    display: none;
+}

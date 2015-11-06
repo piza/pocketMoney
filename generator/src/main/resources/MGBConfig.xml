@@ -9,11 +9,34 @@
             <property name="suppressAllComments" value="true" />
         </commentGenerator>
 
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://123.56.134.63:3306/portal_db?useUnicode=true&amp;characterEncoding=utf-8" userId="portal" password="portal123" />
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/portal_db?useUnicode=true&amp;characterEncoding=utf-8" userId="root" password="dabing" />
         <javaModelGenerator targetPackage="com.piza.model" targetProject="${outputPath}/src/" />
         <sqlMapGenerator targetPackage="orm" targetProject="${outputPath}/resources/" />
-        <!--<javaClientGenerator targetPackage="com.piza.dao" targetProject="${outputPath}/src/" type="XMLMAPPER" />-->
+        <javaClientGenerator targetPackage="com.piza.dao" targetProject="${outputPath}/src/" type="XMLMAPPER" />
 
+        <table schema="portal_db" tableName="authority" domainObjectName="Authority">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table schema="portal_db" tableName="favorite_site" domainObjectName="FavoriteSite">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table schema="portal_db" tableName="member_info" domainObjectName="MemberInfo">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table schema="portal_db" tableName="role" domainObjectName="Role">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table schema="portal_db" tableName="role_authority_map" domainObjectName="RoleAuthorityMap">
+        </table>
+        <table schema="portal_db" tableName="user_info" domainObjectName="UserInfo">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table schema="portal_db" tableName="user_info_role_map" domainObjectName="UserInfoRoleMap">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table schema="portal_db" tableName="user_log" domainObjectName="UserLog">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
         <table schema="portal_db" tableName="weixin_account" domainObjectName="WeixinAccount">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>

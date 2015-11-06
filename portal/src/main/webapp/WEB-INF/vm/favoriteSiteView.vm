@@ -1,0 +1,53 @@
+<script type="text/template" id="favorite-site-view">
+
+</script>
+#[[
+<script type="text/javascript">
+
+    define('modules/FavoriteSiteModule',['backbone','FrameworkModule'], function(Backbone,Framework){
+
+        var FavoriteSiteList=Framework.BaseCollection.extend({
+            url:"/favoriteSite/list"
+        });
+        var list=new FavoriteSiteList({"baseUrl":"/favoriteSite/list","perPage":10});
+        list.fetch().then(function(){
+            alert("书签ready!");
+        });
+        var FavoriteSiteModule = Backbone.View.extend({
+
+            template: _.template($("#favorite-site-view").html()),
+            events:{
+
+            },
+            initialize:function(){
+                $("body").append(this.$el);
+                Backbone.Events.on("keyword-changed",this.keywordChanged,this);
+            },
+            render:function(){
+                this.$el.html(this.template());
+            },
+            keywordChanged:function(keyword){
+                if(keyword.length<=0){
+                    return;
+                }
+                var favoriteSite="";
+                list.each(function(model){
+                    if(model.get("title").indexOf(keyword) > -1){
+                        favoriteSite=model.get("title");
+                    }
+                });
+                if(favoriteSite.length>0){
+                    var hintData={
+                        "type":"favoriteSite",
+                        "title":favoriteSite
+                    };
+                    Backbone.Events.trigger("add-search-result",hintData);
+                }
+
+            }
+        });
+
+        return FavoriteSiteModule;
+    });
+</script>
+]]#

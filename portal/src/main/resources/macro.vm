@@ -1,0 +1,30 @@
+#macro(paging $page $url)
+	#set($nextPage = $page.page+1)
+	#set($prevousPage = $page.page - 1 )
+    #if($page.pages > 1) 
+      #if($page.prev)
+       <li> <a href="$!{request.contextPath}/$url?page=$prevousPage" class="active">上一页</a> </li>
+      #else
+       <li> <a disabled="true">上一页</a></li>
+      #end
+    
+     #foreach($num in $page.pageNums)
+      #if($num==$page.page)
+       <li class="active"><a href="$num" class="toPage">$num</a></li>
+       #else
+       <li><a href="$!{request.contextPath}/$url?page=$num" class="toPage">$num</a></li>
+	  #end
+	 #end
+     
+      #if($page.next) 
+       <li> <a href="$!{request.contextPath}/$url?page=$nextPage" class="next">下一页</a></li>
+      #else 
+        <li> <a disabled="true">下一页</a></li>
+      #end
+    #end
+    
+    <li class="active">
+    <a disabled="true">$page.range[0]-$page.range[1] 共 $page.total</a>
+    </li>
+#end
+

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.piza.dao.WeixinAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.piza.model.WeixinAccount" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="server_url" property="serverUrl" jdbcType="VARCHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="weixin_id" property="weixinId" jdbcType="VARCHAR" />
+    <result column="weixin_code" property="weixinCode" jdbcType="VARCHAR" />
+    <result column="weixin_code_img" property="weixinCodeImg" jdbcType="VARCHAR" />
+    <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+    <result column="app_token" property="appToken" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="account_code" property="accountCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, server_url, token, update_date, weixin_id, weixin_code, weixin_code_img, 
+    app_key, app_token, create_date, account_code, status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.piza.model.WeixinAccountExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from weixin_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from weixin_account
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from weixin_account
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.piza.model.WeixinAccountExample" >
+    delete from weixin_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.piza.model.WeixinAccount" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into weixin_account (name, server_url, token, 
+      update_date, weixin_id, weixin_code, 
+      weixin_code_img, app_key, app_token, 
+      create_date, account_code, status
+      )
+    values (#{name,jdbcType=VARCHAR}, #{serverUrl,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{weixinId,jdbcType=VARCHAR}, #{weixinCode,jdbcType=VARCHAR}, 
+      #{weixinCodeImg,jdbcType=VARCHAR}, #{appKey,jdbcType=VARCHAR}, #{appToken,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{accountCode,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.piza.model.WeixinAccount" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into weixin_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="serverUrl != null" >
+        server_url,
+      </if>
+      <if test="token != null" >
+        token,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="weixinId != null" >
+        weixin_id,
+      </if>
+      <if test="weixinCode != null" >
+        weixin_code,
+      </if>
+      <if test="weixinCodeImg != null" >
+        weixin_code_img,
+      </if>
+      <if test="appKey != null" >
+        app_key,
+      </if>
+      <if test="appToken != null" >
+        app_token,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="accountCode != null" >
+        account_code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="serverUrl != null" >
+        #{serverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null" >
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="weixinId != null" >
+        #{weixinId,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinCode != null" >
+        #{weixinCode,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinCodeImg != null" >
+        #{weixinCodeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="appKey != null" >
+        #{appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="appToken != null" >
+        #{appToken,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountCode != null" >
+        #{accountCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.piza.model.WeixinAccountExample" resultType="java.lang.Integer" >
+    select count(*) from weixin_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update weixin_account
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serverUrl != null" >
+        server_url = #{record.serverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.token != null" >
+        token = #{record.token,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateDate != null" >
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.weixinId != null" >
+        weixin_id = #{record.weixinId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weixinCode != null" >
+        weixin_code = #{record.weixinCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weixinCodeImg != null" >
+        weixin_code_img = #{record.weixinCodeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appKey != null" >
+        app_key = #{record.appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appToken != null" >
+        app_token = #{record.appToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.accountCode != null" >
+        account_code = #{record.accountCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update weixin_account
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      server_url = #{record.serverUrl,jdbcType=VARCHAR},
+      token = #{record.token,jdbcType=VARCHAR},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      weixin_id = #{record.weixinId,jdbcType=VARCHAR},
+      weixin_code = #{record.weixinCode,jdbcType=VARCHAR},
+      weixin_code_img = #{record.weixinCodeImg,jdbcType=VARCHAR},
+      app_key = #{record.appKey,jdbcType=VARCHAR},
+      app_token = #{record.appToken,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      account_code = #{record.accountCode,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.piza.model.WeixinAccount" >
+    update weixin_account
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="serverUrl != null" >
+        server_url = #{serverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null" >
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="weixinId != null" >
+        weixin_id = #{weixinId,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinCode != null" >
+        weixin_code = #{weixinCode,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinCodeImg != null" >
+        weixin_code_img = #{weixinCodeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="appKey != null" >
+        app_key = #{appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="appToken != null" >
+        app_token = #{appToken,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountCode != null" >
+        account_code = #{accountCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.piza.model.WeixinAccount" >
+    update weixin_account
+    set name = #{name,jdbcType=VARCHAR},
+      server_url = #{serverUrl,jdbcType=VARCHAR},
+      token = #{token,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      weixin_id = #{weixinId,jdbcType=VARCHAR},
+      weixin_code = #{weixinCode,jdbcType=VARCHAR},
+      weixin_code_img = #{weixinCodeImg,jdbcType=VARCHAR},
+      app_key = #{appKey,jdbcType=VARCHAR},
+      app_token = #{appToken,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      account_code = #{accountCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
