@@ -42,7 +42,7 @@ public class IndexController extends BaseController{
             return successResult(cachedRes);
         }
         try {
-            Document htmlDoc= Jsoup.connect("http://photography.nationalgeographic.com/photography/photo-of-the-day").get();
+            Document htmlDoc= Jsoup.connect(" b").get();
             Element imgEl=htmlDoc.select(".primary_photo img").get(0);
             result.put("imgUrl",imgEl.attr("src"));
             result.put("alt",imgEl.attr("alt"));
