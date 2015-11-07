@@ -5,7 +5,7 @@
         <%
           _.each(dataList,function(item){
         %>
-            <li><a href="javascript:void(0);" id="<%item.id%>"><%=item.title%></a></li>
+            <li><a href="javascript:void(0);" class='openHintTarget' callBackEvent="<%=item.callBackEvent%>" callBackKey="<%=item.callBackKey%>"><%=item.title%></a></li>
         <%
           });
         %>
@@ -68,6 +68,9 @@
                     this.$el.hide();
                 }
                 this.$("ul.dropdown-menu").html(this.template({"dataList":resultList.toJSON()}));
+            },
+            openHintTarget:function(e){
+                Backbone.Events.trigger($(e.target).attr("callBackEvent"),$(e.target).attr("callBackKey"))
             }
         });
 

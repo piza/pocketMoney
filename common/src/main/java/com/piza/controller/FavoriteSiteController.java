@@ -56,8 +56,8 @@ public class FavoriteSiteController extends BaseController {
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
         FavoriteSiteExample exam = new FavoriteSiteExample();
-        paging.setTotal(favoriteSiteService.countByExample(exam));
-        exam.setOrderByClause(" id desc " + paging.build());
+//        paging.setTotal(favoriteSiteService.countByExample(exam));
+//        exam.setOrderByClause(" id desc " + paging.build());
         List<FavoriteSite> list = favoriteSiteService.selectByExample(exam);
         return successResult(list);
     }

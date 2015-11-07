@@ -11,7 +11,7 @@
         });
         var list=new FavoriteSiteList({"baseUrl":"/favoriteSite/list","perPage":10});
         list.fetch().then(function(){
-            alert("书签ready!");
+            console.log("favorite site is ready");
         });
         var FavoriteSiteModule = Backbone.View.extend({
 
@@ -22,6 +22,8 @@
             initialize:function(){
                 $("body").append(this.$el);
                 Backbone.Events.on("keyword-changed",this.keywordChanged,this);
+                Backbone.Events.on("favorite-site-open",this.openFavorite,this);
+
             },
             render:function(){
                 this.$el.html(this.template());
@@ -30,20 +32,28 @@
                 if(keyword.length<=0){
                     return;
                 }
-                var favoriteSite="";
-                list.each(function(model){
-                    if(model.get("title").indexOf(keyword) > -1){
-                        favoriteSite=model.get("title");
+                var count=0;
+                list.each(function(model,index){
+                    if(count>6){
+                        return;
+                    }
+                    if(model.get("title").toLowerCase().indexOf(keyword) > -1){
+                        var hintData={
+                            "type":"favoriteSite-"+index,
+                            "title":model.get("title"),
+                            "callBackEvent":"favorite-site-open",
+                            "callBackKey":model.id
+                        };
+                        Backbone.Events.trigger("add-search-result",hintData);
+                        count++;
                     }
                 });
-                if(favoriteSite.length>0){
-                    var hintData={
-                        "type":"favoriteSite",
-                        "title":favoriteSite
-                    };
-                    Backbone.Events.trigger("add-search-result",hintData);
-                }
 
+
+            }
+            ,openFavorite:function(key){
+                var model = list.get(key);
+                window.open(model.get("siteUrl"),"_blank");
             }
         });
 

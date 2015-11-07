@@ -88,6 +88,7 @@
                 'keydown #keywordInpt':"keywordKeyDown",
                 'keyup #keywordInpt':"keywordChanged"
             },
+            timeoutHandler:0,
             initialize:function(){
 
             },
@@ -124,7 +125,19 @@
             },
             keywordChanged:function(){
                 var word=this.$("#keywordInpt").val();
+//                console.log(word+"  --- "+ (new Date()).getMilliseconds());
+                if(word.length == 0){
+                    this.triggerKeywordChanged();
+                }
+                if(this.timeoutHandler!=0){
+                    clearTimeout(this.timeoutHandler);
+                }
+                this.timeoutHandler=setTimeout(this.triggerKeywordChanged,600);
+            },
+            triggerKeywordChanged:function(){
+                var word=this.$("#keywordInpt").val();
                 Backbone.Events.trigger("keyword-changed",word);
+                this.timeoutHandler=0;
             }
         });
 

@@ -8,6 +8,8 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="/css/portal.css" rel="stylesheet">
+    <link href="/scripts/skin/layer.css" rel="stylesheet">
+
 
 </head>
 <body style="background-image: url('/images/background.jpg')">
@@ -31,11 +33,11 @@
 
 </div>
 #parse("framework.vm")
-#parse("triggerView.vm")
 #parse("searchView.vm")
 #parse("searchHintView.vm")
 #parse("translateView.vm")
 #parse("favoriteSiteView.vm")
+#parse("triggerView.vm")
 
 
 <script  type="text/javascript">
@@ -48,7 +50,8 @@
             'backbone': 'backbone.1.2.2',
             'bootstrap': 'bootstrap.min',
             'text': 'text',
-            'require': 'require'
+            'require': 'require',
+            'layer':'layer'
         },
         shim:{
             'jquery':{
@@ -79,6 +82,9 @@
 //                translateModule.render();
                 require(['modules/FavoriteSiteModule'], function(FavoriteSiteModule) {
                     new FavoriteSiteModule();
+                });
+                require(['modules/TriggerModule'], function(TriggerModule) {
+                    new TriggerModule({"el":$("body")});
                 });
             });
         }
