@@ -1,11 +1,8 @@
 #!/bin/bash
 
-export  AUTODEPLOY_HOME=`pwd`
-. $AUTODEPLOY_HOME/script/tasks/include.sh
-[ $? -eq 0 ] || fail "env setup faild,check $AUTODEPLOY_HOME/include.sh please."
-
-export  GIT_REPO="/home/robot/code_src/yijian" || check_dir $GIT_REPO
-export  GIT_PATH="git@gitlab.01cun.com:jianshen/yijian.git"
+basepath=$(cd `dirname $0`; pwd)
+. $basepath/include.sh
+[ $? -eq 0 ] || fail "env setup faild,check include.sh please."
 
 cd $GIT_REPO
 #git reset --hard origin/master >> $AUTODEPLOY_LOG_FILE
