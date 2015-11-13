@@ -42,18 +42,26 @@ public class IndexController extends BaseController{
             return successResult(cachedRes);
         }
         try {
-            Document htmlDoc= Jsoup.connect(" b").get();
+            Document htmlDoc= Jsoup.connect("http://photography.nationalgeographic.com/photography/photo-of-the-day").get();
             Element imgEl=htmlDoc.select(".primary_photo img").get(0);
             result.put("imgUrl",imgEl.attr("src"));
             result.put("alt",imgEl.attr("alt"));
-            result.put("publishTime",htmlDoc.select(".article_text .publication_time").get(0).text());
-            result.put("title",htmlDoc.select(".article_text h2").get(0).text());
-            result.put("desc",htmlDoc.select(".article_text [dir=ltr] span").get(0).text());
+            result.put("publishTime",this.getText(htmlDoc,".article_text .publication_time"));
+            result.put("title",this.getText(htmlDoc,".article_text h2"));
+            result.put("desc",this.getText(htmlDoc,".article_text [dir=ltr] span"));
             request.getServletContext().setAttribute("bg_cache_"+timestamp,result);
         } catch (IOException e) {
             e.printStackTrace();
             return failedResult(ErrorTypeEnum.SERVER_ERROR,"connect error");
         }
         return successResult(result);
+    }
+
+    private String getText(Document htmlDoc,String slt){
+        try{
+            return htmlDoc.select(slt).get(0).text();
+        }catch (Exception e){
+            return "";
+        }
     }
 }

@@ -4,9 +4,10 @@
         <div class="input-group">
             <input type="text" class="form-control" placeholder="keyword..." id="keywordInpt">
             <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" id="baiduSearchBtn">百度</button>
-                &nbsp;
-            <button class="btn btn-primary" type="button" id="googleSearchBtn">Google</button>
+##            <button class="btn btn-primary" type="button" id="baiduSearchBtn">百度</button>
+##                &nbsp;
+##            <button class="btn btn-primary" type="button" id="googleSearchBtn">搜索</button>
+            <button class="btn btn-primary" type="button" id="searchBtn">搜索</button>
 
           </span>
         </div>
@@ -83,7 +84,7 @@
         var SearchView = Backbone.View.extend({
             template: _.template($("#search-view").html()),
             events:{
-                'click #googleSearchBtn':"googleSearch",
+                'click #searchBtn':"search",
                 'click #baiduSearchBtn':"baiduSearch",
                 'keydown #keywordInpt':"keywordKeyDown",
                 'keyup #keywordInpt':"keywordChanged"
@@ -94,6 +95,10 @@
             },
             render:function(){
                 this.$el.html(this.template());
+            },
+            search:function(){
+                this.baiduSearch();
+                this.googleSearch();
             },
             googleSearch:function(){
                 var word=this.$("#keywordInpt").val();
@@ -119,8 +124,7 @@
             },
             keywordKeyDown:function(evt){
                 if(evt.keyCode == 13){
-                    this.baiduSearch();
-                    this.googleSearch();
+                    this.search();
                 }
             },
             keywordChanged:function(){
