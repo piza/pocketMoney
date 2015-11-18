@@ -95,6 +95,7 @@
             },
             render:function(){
                 this.$el.html(this.template());
+                this.$("#keywordInpt").focus();
             },
             search:function(){
                 this.baiduSearch();

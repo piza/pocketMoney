@@ -29,7 +29,7 @@
                 this.$el.html(this.template());
             },
             keywordChanged:function(keyword){
-                if(keyword.length<=0){
+                if(keyword.trim().length<=0){
                     return;
                 }
                 var count=0;
