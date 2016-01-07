@@ -11,8 +11,8 @@ import $!{servicePackage}.$!{modelClass}Service;
 @Service
 public class $!{modelClass}ServiceImpl extends BaseServiceImpl<$!{modelClass}, $!{modelClass}Example, Integer> implements $!{modelClass}Service {
 
-@Autowired
-public void setBaseMapper($!{modelClass}Mapper mapper) {
-this.baseMapper = mapper;
-}
+    @Autowired
+    public void setBaseMapper($!{modelClass}Mapper mapper) {
+        this.baseMapper = mapper;
+    }
 }
