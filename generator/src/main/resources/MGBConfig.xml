@@ -4,28 +4,65 @@
 
     <properties resource="config.properties" />
     <classPathEntry location="/Users/hong/Desktop/sharelibs/mysql-connector-java-5.1.11.jar"/>
-    <context id="defaultContext">
+    <context id="defaultContext" targetRuntime="MyBatis3">
+        <plugin type="com.piza.generator.plugin.MobileApiPlugin"/>
         <commentGenerator>
             <property name="suppressAllComments" value="true" />
         </commentGenerator>
 
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/bonus?useUnicode=true&amp;characterEncoding=utf-8" userId="root" password="dabing" />
-        <javaModelGenerator targetPackage="com.pocketmoney.model" targetProject="${outputPath}/src/" />
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/education?useUnicode=true&amp;characterEncoding=utf-8" userId="root" password="dabing" />
+        <javaModelGenerator targetPackage="com.ktb.model" targetProject="${outputPath}/src/" />
         <sqlMapGenerator targetPackage="orm" targetProject="${outputPath}/resources/" />
-        <javaClientGenerator targetPackage="com.pocketmoney.dao" targetProject="${outputPath}/src/" type="XMLMAPPER" />
+        <javaClientGenerator targetPackage="com.ktb.dao" targetProject="${outputPath}/src/" type="XMLMAPPER" />
 
 
-        <table schema="bonus" tableName="admin" domainObjectName="Admin">
+        <table schema="education" tableName="class_info" domainObjectName="ClassInfo">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
-        <table schema="bonus" tableName="operate_log" domainObjectName="OperateLog">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <table schema="bonus" tableName="stuff" domainObjectName="Stuff">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <table schema="bonus" tableName="weekly_record" domainObjectName="WeeklyRecord">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
+        <!--<table schema="education" tableName="course_chapter" domainObjectName="CourseChapter">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="course_info" domainObjectName="CourseInfo">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="exam_paper" domainObjectName="ExamPaper">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="exam_record" domainObjectName="ExamRecord">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="exam_record_answer" domainObjectName="ExamRecordAnswer">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="forum_posts" domainObjectName="ForumPosts">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+
+        <!--<table schema="education" tableName="forum_posts_follow" domainObjectName="ForumPostsFollow">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+
+        <!--<table schema="education" tableName="message_info" domainObjectName="MessageInfo">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="posts_comment" domainObjectName="PostsComment">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="question" domainObjectName="Question">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="question_option" domainObjectName="QuestionOption">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="teach_notify" domainObjectName="TeachNotify">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="user_account" domainObjectName="UserAccount">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="video_watch_record" domainObjectName="VideoWatchRecord">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+
     </context>
 </generatorConfiguration>

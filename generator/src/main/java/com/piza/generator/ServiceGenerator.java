@@ -7,13 +7,16 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.mybatis.generator.api.ProgressCallback;
+import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.TableConfiguration;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -30,6 +33,7 @@ public class ServiceGenerator implements ProgressCallback {
     private String servicePackage="";
     private String validatorPackage="";
     private String controllerPackage="";
+    private String apiPackage="";
 
     private VelocityContext context;
     private VelocityEngine ve;
@@ -38,8 +42,14 @@ public class ServiceGenerator implements ProgressCallback {
     private Template implTemplate;
     private Template validatorTemplate;
     private Template controllerTemplate;
+    private Template apiTemplate;
+
+    private static Map<String,String> commentMap=new HashMap<String,String>();
 
 
+    public static void addModelJsonComment(String tableName,String jsonStr){
+        commentMap.put(tableName,jsonStr);
+    }
     public ServiceGenerator(Properties properties,Configuration config){
         this.properties=properties;
         this.config=config;
@@ -50,6 +60,8 @@ public class ServiceGenerator implements ProgressCallback {
         servicePackage=properties.getProperty("basePackage")+".service";
         validatorPackage=properties.getProperty("basePackage")+".validator";
         controllerPackage=properties.getProperty("basePackage")+".controller";
+        apiPackage=properties.getProperty("basePackage")+".api";
+
         context = new VelocityContext();
         context.put("basePackage",properties.getProperty("basePackage"));
         context.put("modelPackage",modelPackage );
@@ -57,6 +69,8 @@ public class ServiceGenerator implements ProgressCallback {
         context.put("servicePackage",servicePackage);
         context.put("validatorPackage",validatorPackage);
         context.put("controllerPackage",controllerPackage);
+        context.put("apiPackage",apiPackage);
+
 
         ve = new VelocityEngine();
         ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
@@ -67,6 +81,8 @@ public class ServiceGenerator implements ProgressCallback {
         implTemplate = ve.getTemplate("serviceImplTemplate.vm");
         validatorTemplate = ve.getTemplate("validatorTemplate.vm");
         controllerTemplate = ve.getTemplate("controllerTemplate.vm");
+        apiTemplate = ve.getTemplate("apiTemplate.vm","UTF-8");
+
 
     }
     @Override
@@ -105,6 +121,11 @@ public class ServiceGenerator implements ProgressCallback {
             if(!controllerFolder.exists()){
                 controllerFolder.mkdirs();
             }
+
+            File apiFolder=new File(baseOutputPath+File.separator+"api");
+            if(!apiFolder.exists()){
+                apiFolder.mkdirs();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -125,8 +146,9 @@ public class ServiceGenerator implements ProgressCallback {
     public void done() {
 
         List<TableConfiguration> tableConfigurationList=config.getContext("defaultContext").getTableConfigurations();
+
         for(TableConfiguration tableConfiguration:tableConfigurationList){
-            generateFile(tableConfiguration.getDomainObjectName());
+            generateFile(tableConfiguration.getDomainObjectName(),tableConfiguration.getTableName());
         }
 
         Runtime runtime=Runtime.getRuntime();
@@ -145,13 +167,14 @@ public class ServiceGenerator implements ProgressCallback {
             }
         }
     }
+
     private String lowFirstChar(String tempStr){
         char[] cs=tempStr.toCharArray();
         cs[0]+=32;
         return String.valueOf(cs);
     }
 
-    private void generateFile(String modelClass){
+    private void generateFile(String modelClass,String tableName){
 
         try {
             context.put("modelClass", modelClass);
@@ -183,6 +206,12 @@ public class ServiceGenerator implements ProgressCallback {
             controllerWriter.flush();
             controllerWriter.close();
 
+
+            context.put("jsonComment",commentMap.get(tableName));
+            FileWriter apiWriter=new FileWriter(baseOutputPath+File.separator+"api"+File.separator+modelClass+"API.java");
+            apiTemplate.merge(context, apiWriter);
+            apiWriter.flush();
+            apiWriter.close();
 
         } catch (Exception ex) {
             ex.printStackTrace();
