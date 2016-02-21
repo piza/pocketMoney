@@ -2,7 +2,7 @@
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration>
 
-    <properties resource="config.properties" />
+    <properties resource="config_education.properties" />
     <classPathEntry location="/Users/hong/Desktop/sharelibs/mysql-connector-java-5.1.11.jar"/>
     <context id="defaultContext" targetRuntime="MyBatis3">
         <plugin type="com.piza.generator.plugin.MobileApiPlugin"/>
@@ -16,9 +16,9 @@
         <javaClientGenerator targetPackage="com.ktb.dao" targetProject="${outputPath}/src/" type="XMLMAPPER" />
 
 
-        <table schema="education" tableName="class_info" domainObjectName="ClassInfo">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
+        <!--<table schema="education" tableName="class_info" domainObjectName="ClassInfo">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
         <!--<table schema="education" tableName="course_chapter" domainObjectName="CourseChapter">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
@@ -28,9 +28,9 @@
         <!--<table schema="education" tableName="exam_paper" domainObjectName="ExamPaper">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
-        <!--<table schema="education" tableName="exam_record" domainObjectName="ExamRecord">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
-        <!--</table>-->
+        <table schema="education" tableName="exam_record" domainObjectName="ExamRecord">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
         <!--<table schema="education" tableName="exam_record_answer" domainObjectName="ExamRecordAnswer">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
@@ -64,5 +64,11 @@
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
 
+        <!--<table schema="education" tableName="forum_posts_image" domainObjectName="ForumPostsImage">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
+        <!--<table schema="education" tableName="user_feedback" domainObjectName="UserFeedback">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
     </context>
 </generatorConfiguration>

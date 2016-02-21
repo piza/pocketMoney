@@ -41,32 +41,50 @@ public class MobileApiPlugin extends PluginAdapter {
         return true;
     }
 
-    private void generateToString(IntrospectedTable introspectedTable,
-                                  TopLevelClass topLevelClass) {
-        String tableName=introspectedTable.getTableConfiguration().getTableName();
-        StringBuilder sb=new StringBuilder();
-        sb.append("* {\n");
-        sb.append("    *   \"success\":{\n");
-        sb.append("    *      \"pagingInfo\":{\n");
-        sb.append("    *         \"page\":0,\n");
-        sb.append("    *         \"perPage\":10\n");
-        sb.append("    *         \"total\":21\n");
-        sb.append("    *         \"needPaging\":true\n");
-        sb.append("    *         \"start\":0\n");
-        sb.append("    *       },\n");
-        sb.append("    *       \"models\":[{\n");
-        for(Field field:topLevelClass.getFields()){
-            String property = field.getName();
-            sb.append("    *         ").append(property)
-                    .append(":")
-                    .append("\"")
-            .append(getRemark(property,introspectedTable))
-            .append("\",\n");
+//    private void generateToString(IntrospectedTable introspectedTable,
+//                                  TopLevelClass topLevelClass) {
+//        String tableName=introspectedTable.getTableConfiguration().getTableName();
+//        StringBuilder sb=new StringBuilder();
+//        sb.append("* {\n");
+//        sb.append("    *   \"success\":{\n");
+//        sb.append("    *      \"pagingInfo\":{\n");
+//        sb.append("    *         \"page\":0,\n");
+//        sb.append("    *         \"perPage\":10\n");
+//        sb.append("    *         \"total\":21\n");
+//        sb.append("    *         \"needPaging\":true\n");
+//        sb.append("    *         \"start\":0\n");
+//        sb.append("    *       },\n");
+//        sb.append("    *       \"models\":[{\n");
+//        for(Field field:topLevelClass.getFields()){
+//            String property = field.getName();
+//            sb.append("    *         ").append(property)
+//                    .append(":")
+//                    .append("\"")
+//            .append(getRemark(property,introspectedTable))
+//            .append("\",\n");
+//
+//        }
+//        sb.append("    *        }\n    *       ]\n    *   }\n    * }");
+//        ServiceGenerator.addModelJsonComment(tableName,sb.toString());
+//    }
+private void generateToString(IntrospectedTable introspectedTable,
+                              TopLevelClass topLevelClass) {
+    String tableName=introspectedTable.getTableConfiguration().getTableName();
+    StringBuilder sb=new StringBuilder();
+    sb.append(" {\n");
+    for(Field field:topLevelClass.getFields()){
+        String property = field.getName();
+        sb.append("    *           ").append(property)
+                .append(":")
+                .append("\"")
+                .append(getRemark(property,introspectedTable))
+                .append("\",\n");
 
-        }
-        sb.append("    *        }\n    *       ]\n    *   }\n    * }");
-        ServiceGenerator.addModelJsonComment(tableName,sb.toString());
     }
+    sb.append("    *           }");
+    ServiceGenerator.addModelJsonComment(tableName,sb.toString());
+}
+
 
     private String getRemark(String fieldName,IntrospectedTable introspectedTable){
         for(IntrospectedColumn column:introspectedTable.getAllColumns()){
