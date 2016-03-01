@@ -28,9 +28,9 @@
         <!--<table schema="education" tableName="exam_paper" domainObjectName="ExamPaper">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
-        <table schema="education" tableName="exam_record" domainObjectName="ExamRecord">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
+        <!--<table schema="education" tableName="exam_record" domainObjectName="ExamRecord">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
         <!--<table schema="education" tableName="exam_record_answer" domainObjectName="ExamRecordAnswer">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
@@ -70,5 +70,8 @@
         <!--<table schema="education" tableName="user_feedback" domainObjectName="UserFeedback">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
+        <table schema="education" tableName="app_version" domainObjectName="AppVersion">
+        <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
     </context>
 </generatorConfiguration>
