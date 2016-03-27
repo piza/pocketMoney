@@ -13,70 +13,70 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import com.piza.bean.PagingProperties;
 
-import com.piza.model.UserLog;
-import com.piza.model.UserLogExample;
-import com.piza.service.UserLogService;
-import com.piza.validator.UserLogValidator;
+import com.piza.model.DailyNote;
+import com.piza.model.DailyNoteExample;
+import com.piza.service.DailyNoteService;
+import com.piza.validator.DailyNoteValidator;
 
 
 
 @Controller
-@RequestMapping("/userLog")
-public class UserLogController extends BaseController {
+@RequestMapping("/dailyNote")
+public class DailyNoteController extends BaseController {
 
     @Autowired
-    private UserLogService userLogService;
+    private DailyNoteService dailyNoteService;
 
-    @InitBinder(value = "userLog")
+    @InitBinder(value = "dailyNote")
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new UserLogValidator());
+        binder.setValidator(new DailyNoteValidator());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> insert(@Valid @RequestBody UserLog userLog, BindingResult result) {
+    public Map<String, Object> insert(@Valid @RequestBody DailyNote dailyNote, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        userLogService.insert(userLog);
-        return successResult(userLog);
+        dailyNoteService.insert(dailyNote);
+        return successResult(dailyNote);
     }
 
-//    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-//    @ResponseBody
-//    public Map<String, Object> delete(@PathVariable("id") Integer id) {
-//        UserLog delete = new UserLog();
-//        delete.setId(id);
-//        delete.setStatus(NormalStatusEnum.DELETED.getValue());
-//        userLogService.updateByPrimaryKeySelective(delete);
-//        return successResult("Ok");
-//    }
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public Map<String, Object> delete(@PathVariable("id") Integer id) {
+        DailyNote delete = new DailyNote();
+        delete.setId(id);
+        delete.setStatus(NormalStatusEnum.DELETED.getValue());
+        dailyNoteService.updateByPrimaryKeySelective(delete);
+        return successResult("Ok");
+    }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
-        UserLogExample exam = new UserLogExample();
+        DailyNoteExample exam = new DailyNoteExample();
         if(paging.getNeedPaging()) {
-            paging.setTotal(userLogService.countByExample(exam));
+            paging.setTotal(dailyNoteService.countByExample(exam));
             exam.setOrderByClause(" id desc " + paging.build());
         }
-        List<UserLog> list = userLogService.selectByExample(exam);
+        List<DailyNote> list = dailyNoteService.selectByExample(exam);
         return successPageList(paging,list);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> get(@PathVariable("id") Integer id) {
-        return successResult(userLogService.selectByPrimaryKey(id));
+        return successResult(dailyNoteService.selectByPrimaryKey(id));
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody UserLog userLog, BindingResult result) {
+    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody DailyNote dailyNote, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        userLogService.updateByPrimaryKeySelective(userLog);
+        dailyNoteService.updateByPrimaryKeySelective(dailyNote);
         return successResult("ok");
     }
 

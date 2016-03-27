@@ -27,19 +27,19 @@ public class WeixinAccountController extends BaseController {
     @Autowired
     private WeixinAccountService weixinAccountService;
 
-    @InitBinder(value = "form")
+    @InitBinder(value = "weixinAccount")
     public void initBinder(WebDataBinder binder) {
         binder.setValidator(new WeixinAccountValidator());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> insert(@Valid WeixinAccount form, BindingResult result) {
+    public Map<String, Object> insert(@Valid @RequestBody WeixinAccount weixinAccount, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        weixinAccountService.insert(form);
-        return successResult(form);
+        weixinAccountService.insert(weixinAccount);
+        return successResult(weixinAccount);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -56,10 +56,12 @@ public class WeixinAccountController extends BaseController {
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
         WeixinAccountExample exam = new WeixinAccountExample();
-        paging.setTotal(weixinAccountService.countByExample(exam));
-        exam.setOrderByClause(" id desc " + paging.build());
+        if(paging.getNeedPaging()) {
+            paging.setTotal(weixinAccountService.countByExample(exam));
+            exam.setOrderByClause(" id desc " + paging.build());
+        }
         List<WeixinAccount> list = weixinAccountService.selectByExample(exam);
-        return successResult(list);
+        return successPageList(paging,list);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -70,12 +72,12 @@ public class WeixinAccountController extends BaseController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid WeixinAccount form, BindingResult result) {
+    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody WeixinAccount weixinAccount, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        weixinAccountService.updateByPrimaryKeySelective(form);
-        return successResult(form);
+        weixinAccountService.updateByPrimaryKeySelective(weixinAccount);
+        return successResult("ok");
     }
 
 }

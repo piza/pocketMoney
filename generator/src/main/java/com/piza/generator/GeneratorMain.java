@@ -26,8 +26,15 @@ public class GeneratorMain {
         try {
             List<String> warnings = new ArrayList<String>();
             boolean overwrite = true;
-            File configFile = new File(ClassLoader.getSystemResource("MGBConfig_education.xml").getPath());
-            File propertiesFile=new File(ClassLoader.getSystemResource("config_education.properties").getPath());
+            File configFile = new File(ClassLoader.getSystemResource("MGBConfig_portal.xml").getPath());
+            File propertiesFile=new File(ClassLoader.getSystemResource("config_portal.properties").getPath());
+
+//            File configFile = new File(ClassLoader.getSystemResource("MGBConfig_education.xml").getPath());
+//            File propertiesFile=new File(ClassLoader.getSystemResource("config_education.properties").getPath());
+
+//            File configFile = new File(ClassLoader.getSystemResource("MGBConfig_official.xml").getPath());
+//            File propertiesFile=new File(ClassLoader.getSystemResource("config_official.properties").getPath());
+
 //            File configFile = new File(ClassLoader.getSystemResource("MGBConfig_bonus.xml").getPath());
 //            File propertiesFile=new File(ClassLoader.getSystemResource("config_bonus.properties").getPath());
             Properties properties=new Properties();

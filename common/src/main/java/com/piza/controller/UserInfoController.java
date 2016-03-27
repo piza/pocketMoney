@@ -27,19 +27,19 @@ public class UserInfoController extends BaseController {
     @Autowired
     private UserInfoService userInfoService;
 
-    @InitBinder(value = "form")
+    @InitBinder(value = "userInfo")
     public void initBinder(WebDataBinder binder) {
         binder.setValidator(new UserInfoValidator());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> insert(@Valid UserInfo form, BindingResult result) {
+    public Map<String, Object> insert(@Valid @RequestBody UserInfo userInfo, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        userInfoService.insert(form);
-        return successResult(form);
+        userInfoService.insert(userInfo);
+        return successResult(userInfo);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -56,10 +56,12 @@ public class UserInfoController extends BaseController {
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
         UserInfoExample exam = new UserInfoExample();
-        paging.setTotal(userInfoService.countByExample(exam));
-        exam.setOrderByClause(" id desc " + paging.build());
+        if(paging.getNeedPaging()) {
+            paging.setTotal(userInfoService.countByExample(exam));
+            exam.setOrderByClause(" id desc " + paging.build());
+        }
         List<UserInfo> list = userInfoService.selectByExample(exam);
-        return successResult(list);
+        return successPageList(paging,list);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -70,12 +72,12 @@ public class UserInfoController extends BaseController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid UserInfo form, BindingResult result) {
+    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody UserInfo userInfo, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        userInfoService.updateByPrimaryKeySelective(form);
-        return successResult(form);
+        userInfoService.updateByPrimaryKeySelective(userInfo);
+        return successResult("ok");
     }
 
 }

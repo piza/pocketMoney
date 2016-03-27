@@ -17,7 +17,7 @@
 
         <!-- Normal log:  [DEBUG->WARN]         -->
         <appender name="Access" class="org.apache.log4j.RollingFileAppender">
-          <param name="File" value="${catalina.base}/logs/yijian_operate_debug.log" />
+          <param name="File" value="${catalina.base}/logs/portal_debug.log" />
           <param name="Append" value="true" />
           <param name="MaxFileSize" value="10MB" />
           <param name="MaxBackupIndex" value="2" />
@@ -35,7 +35,7 @@
 
         <appender name="Info" class="org.apache.log4j.RollingFileAppender">
             <param name="Append" value="true" />
-            <param name="File" value="${catalina.base}/logs/product/yijian_operate_info.log" />
+            <param name="File" value="${catalina.base}/logs/portal.log" />
             <param name="MaxFileSize" value="100MB" />
             <param name="MaxBackupIndex" value="20" />
             <layout class="org.apache.log4j.PatternLayout">
@@ -52,7 +52,7 @@
         <!-- ERORR LOG: [ERROR->FATAL] -->
          <appender name="Error" class="org.apache.log4j.RollingFileAppender">
           <param name="Append" value="true" />
-          <param name="File" value="${catalina.base}/logs/yijian_operate_error.log" />
+          <param name="File" value="${catalina.base}/logs/portal_error.log" />
           <param name="MaxFileSize" value="1024" />
           <param name="MaxBackupIndex" value="10" />
           <layout class="org.apache.log4j.PatternLayout">
@@ -86,10 +86,10 @@
                         <!--<param name="LevelMax" value="DEBUG" />-->
                 <!--</filter>-->
         <!--</appender>-->
-        <!--<logger name="org.apache.ibatis" additivity="true">-->
-          <!--<level value="debug" />-->
-            <!--<appender-ref ref="IBatis" />-->
-         <!--</logger>-->
+        <logger name="org.apache.ibatis" additivity="true">
+          <level value="debug" />
+            <appender-ref ref="Access" />
+         </logger>
          <!--<logger name="java.sql.Connection" additivity="true">-->
           <!--<level value="debug" />-->
              <!--<appender-ref ref="IBatis" />-->
@@ -114,7 +114,7 @@
 
     <!-- Root Logger -->
     <root>
-                <priority value="info" />
+                <priority value="debug" />
                 <!--<appender-ref ref="STDOUT" />-->
                 <appender-ref ref="Access" />
                 <appender-ref ref="Error" />

@@ -27,19 +27,19 @@ public class FavoriteSiteController extends BaseController {
     @Autowired
     private FavoriteSiteService favoriteSiteService;
 
-    @InitBinder(value = "form")
+    @InitBinder(value = "favoriteSite")
     public void initBinder(WebDataBinder binder) {
         binder.setValidator(new FavoriteSiteValidator());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> insert(@Valid FavoriteSite form, BindingResult result) {
+    public Map<String, Object> insert(@Valid @RequestBody FavoriteSite favoriteSite, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        favoriteSiteService.insert(form);
-        return successResult(form);
+        favoriteSiteService.insert(favoriteSite);
+        return successResult(favoriteSite);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -56,10 +56,12 @@ public class FavoriteSiteController extends BaseController {
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
         FavoriteSiteExample exam = new FavoriteSiteExample();
-//        paging.setTotal(favoriteSiteService.countByExample(exam));
-//        exam.setOrderByClause(" id desc " + paging.build());
+        if(paging.getNeedPaging()) {
+            paging.setTotal(favoriteSiteService.countByExample(exam));
+            exam.setOrderByClause(" id desc " + paging.build());
+        }
         List<FavoriteSite> list = favoriteSiteService.selectByExample(exam);
-        return successResult(list);
+        return successPageList(paging,list);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -70,12 +72,12 @@ public class FavoriteSiteController extends BaseController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid FavoriteSite form, BindingResult result) {
+    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody FavoriteSite favoriteSite, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        favoriteSiteService.updateByPrimaryKeySelective(form);
-        return successResult(form);
+        favoriteSiteService.updateByPrimaryKeySelective(favoriteSite);
+        return successResult("ok");
     }
 
 }

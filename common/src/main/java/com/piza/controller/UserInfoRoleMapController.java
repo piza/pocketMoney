@@ -27,38 +27,41 @@ public class UserInfoRoleMapController extends BaseController {
     @Autowired
     private UserInfoRoleMapService userInfoRoleMapService;
 
-    @InitBinder(value = "form")
+    @InitBinder(value = "userInfoRoleMap")
     public void initBinder(WebDataBinder binder) {
         binder.setValidator(new UserInfoRoleMapValidator());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> insert(@Valid UserInfoRoleMap form, BindingResult result) {
+    public Map<String, Object> insert(@Valid @RequestBody UserInfoRoleMap userInfoRoleMap, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        userInfoRoleMapService.insert(form);
-        return successResult(form);
+        userInfoRoleMapService.insert(userInfoRoleMap);
+        return successResult(userInfoRoleMap);
     }
 
-    @RequestMapping(value = "{roleId}/{userInfoId}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public Map<String, Object> delete(@PathVariable("roleId") Integer roleId,@PathVariable("userInfoId") Integer userInfoId) {
-        UserInfoRoleMapExample userInfoRoleMapExample=new UserInfoRoleMapExample();
-        userInfoRoleMapExample.or().andRoleIdEqualTo(roleId).andUserInfoIdEqualTo(userInfoId);
-        userInfoRoleMapService.deleteByExample(userInfoRoleMapExample);
-        return successResult("Ok");
-    }
+//    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+//    @ResponseBody
+//    public Map<String, Object> delete(@PathVariable("id") Integer id) {
+//        UserInfoRoleMap delete = new UserInfoRoleMap();
+//        delete.setId(id);
+//        delete.setStatus(NormalStatusEnum.DELETED.getVapwlue());
+//        userInfoRoleMapService.updateByPrimaryKeySelective(delete);
+//        return successResult("Ok");
+//    }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
         UserInfoRoleMapExample exam = new UserInfoRoleMapExample();
-        paging.setTotal(userInfoRoleMapService.countByExample(exam));
-        exam.setOrderByClause(" id desc " + paging.build());
+        if(paging.getNeedPaging()) {
+            paging.setTotal(userInfoRoleMapService.countByExample(exam));
+            exam.setOrderByClause(" id desc " + paging.build());
+        }
         List<UserInfoRoleMap> list = userInfoRoleMapService.selectByExample(exam);
-        return successResult(list);
+        return successPageList(paging,list);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -69,12 +72,12 @@ public class UserInfoRoleMapController extends BaseController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid UserInfoRoleMap form, BindingResult result) {
+    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody UserInfoRoleMap userInfoRoleMap, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        userInfoRoleMapService.updateByPrimaryKeySelective(form);
-        return successResult(form);
+        userInfoRoleMapService.updateByPrimaryKeySelective(userInfoRoleMap);
+        return successResult("ok");
     }
 
 }

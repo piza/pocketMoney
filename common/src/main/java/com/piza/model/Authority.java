@@ -1,5 +1,8 @@
 package com.piza.model;
 
+import com.piza.bean.CustomDateTimeSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.Date;
 
 public class Authority {
@@ -63,6 +66,7 @@ public class Authority {
         return createDate;
     }
 
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }

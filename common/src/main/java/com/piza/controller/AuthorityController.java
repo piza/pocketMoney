@@ -1,5 +1,6 @@
 package com.piza.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
@@ -27,39 +28,42 @@ public class AuthorityController extends BaseController {
     @Autowired
     private AuthorityService authorityService;
 
-    @InitBinder(value = "form")
+    @InitBinder(value = "authority")
     public void initBinder(WebDataBinder binder) {
         binder.setValidator(new AuthorityValidator());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> insert(@Valid Authority form, BindingResult result) {
+    public Map<String, Object> insert(@Valid @RequestBody Authority authority, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        authorityService.insert(form);
-        return successResult(form);
+        authority.setCreateDate(new Date());
+        authorityService.insert(authority);
+        return successResult(authority);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public Map<String, Object> delete(@PathVariable("id") Integer id) {
-        Authority delete = new Authority();
-        delete.setId(id);
-        delete.setStatus(NormalStatusEnum.DELETED.getValue().byteValue());
-        authorityService.updateByPrimaryKeySelective(delete);
-        return successResult("Ok");
-    }
+//    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+//    @ResponseBody
+//    public Map<String, Object> delete(@PathVariable("id") Integer id) {
+//        Authority delete = new Authority();
+//        delete.setId(id);
+//        delete.setStatus(NormalStatusEnum.DELETED.getValue());
+//        authorityService.updateByPrimaryKeySelective(delete);
+//        return successResult("Ok");
+//    }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
         AuthorityExample exam = new AuthorityExample();
-        paging.setTotal(authorityService.countByExample(exam));
-        exam.setOrderByClause(" id desc " + paging.build());
+        if(paging.getNeedPaging()) {
+            paging.setTotal(authorityService.countByExample(exam));
+            exam.setOrderByClause(" id desc " + paging.build());
+        }
         List<Authority> list = authorityService.selectByExample(exam);
-        return successResult(list);
+        return successPageList(paging,list);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -70,12 +74,12 @@ public class AuthorityController extends BaseController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid Authority form, BindingResult result) {
+    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody Authority authority, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        authorityService.updateByPrimaryKeySelective(form);
-        return successResult(form);
+        authorityService.updateByPrimaryKeySelective(authority);
+        return successResult("ok");
     }
 
 }

@@ -27,19 +27,19 @@ public class RoleAuthorityMapController extends BaseController {
     @Autowired
     private RoleAuthorityMapService roleAuthorityMapService;
 
-    @InitBinder(value = "form")
+    @InitBinder(value = "roleAuthorityMap")
     public void initBinder(WebDataBinder binder) {
         binder.setValidator(new RoleAuthorityMapValidator());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> insert(@Valid RoleAuthorityMap form, BindingResult result) {
+    public Map<String, Object> insert(@Valid @RequestBody RoleAuthorityMap roleAuthorityMap, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        roleAuthorityMapService.insert(form);
-        return successResult(form);
+        roleAuthorityMapService.insert(roleAuthorityMap);
+        return successResult(roleAuthorityMap);
     }
 
 //    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -56,10 +56,12 @@ public class RoleAuthorityMapController extends BaseController {
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
         RoleAuthorityMapExample exam = new RoleAuthorityMapExample();
-        paging.setTotal(roleAuthorityMapService.countByExample(exam));
-        exam.setOrderByClause(" id desc " + paging.build());
+        if(paging.getNeedPaging()) {
+            paging.setTotal(roleAuthorityMapService.countByExample(exam));
+            exam.setOrderByClause(" id desc " + paging.build());
+        }
         List<RoleAuthorityMap> list = roleAuthorityMapService.selectByExample(exam);
-        return successResult(list);
+        return successPageList(paging,list);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -70,12 +72,12 @@ public class RoleAuthorityMapController extends BaseController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid RoleAuthorityMap form, BindingResult result) {
+    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody RoleAuthorityMap roleAuthorityMap, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        roleAuthorityMapService.updateByPrimaryKeySelective(form);
-        return successResult(form);
+        roleAuthorityMapService.updateByPrimaryKeySelective(roleAuthorityMap);
+        return successResult("ok");
     }
 
 }

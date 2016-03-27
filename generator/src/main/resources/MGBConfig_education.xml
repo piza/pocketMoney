@@ -57,9 +57,9 @@
         <!--<table schema="education" tableName="teach_notify" domainObjectName="TeachNotify">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
-        <!--<table schema="education" tableName="user_account" domainObjectName="UserAccount">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
-        <!--</table>-->
+        <table schema="education" tableName="user_account" domainObjectName="UserAccount">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
         <!--<table schema="education" tableName="video_watch_record" domainObjectName="VideoWatchRecord">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
@@ -70,8 +70,8 @@
         <!--<table schema="education" tableName="user_feedback" domainObjectName="UserFeedback">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
         <!--</table>-->
-        <table schema="education" tableName="app_version" domainObjectName="AppVersion">
-        <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
+        <!--<table schema="education" tableName="app_version" domainObjectName="AppVersion">-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+        <!--</table>-->
     </context>
 </generatorConfiguration>
