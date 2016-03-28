@@ -1,9 +1,0 @@
-package $!{daoPackage};
-
-import $!{modelPackage}.$!{modelClass};
-import $!{modelPackage}.$!{modelClass}Example;
-
-
-public interface $!{modelClass}Mapper extends BaseMapper<$!{modelClass}, $!{modelClass}Example, Integer>{
-
-}

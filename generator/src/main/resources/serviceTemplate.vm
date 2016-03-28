@@ -1,8 +1,0 @@
-package $!servicePackage;
-
-import $!{modelPackage}.$!{modelClass};
-import $!{modelPackage}.$!{modelClass}Example;
-
-public interface $!{modelClass}Service extends BaseService<$!{modelClass}, $!{modelClass}Example, Integer>{
-
-}

@@ -7,7 +7,6 @@
   <version>1.0</version>
     <modules>
         <module>common</module>
-        <module>generator</module>
         <module>portal</module>
     </modules>
   <packaging>pom</packaging>
@@ -293,11 +292,11 @@
             <version>0.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>0.9.2-pre5</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.mchange</groupId>-->
+            <!--<artifactId>c3p0</artifactId>-->
+            <!--<version>0.9.2-pre5</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
