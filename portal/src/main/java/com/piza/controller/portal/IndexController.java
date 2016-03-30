@@ -80,11 +80,22 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Map<String, Object> login(HttpServletRequest request,HttpServletResponse httpServletResponse,@RequestBody UserInfo userInfo) {
 
+        UserInfoExample example=new UserInfoExample();
+        if(!StringUtils.isEmpty(userInfo.getCurrentToken())){//通过token自动登录
+            example.or().andCurrentTokenEqualTo(userInfo.getCurrentToken());
+            List<UserInfo> userInfos=this.userInfoService.selectByExample(example);
+            if(userInfos.size()==1){
+                return successResult(userInfos.get(0));
+            }else{
+                return this.failedResult(ErrorTypeEnum.NOT_FOUND,"token失效!");
+            }
+        }
         if(StringUtils.isEmpty(userInfo.getAccount())|| StringUtils.isEmpty(userInfo.getPassword())){
             return this.failedResult(ErrorTypeEnum.VALIDATE_ERROR,"参数错误!");
         }
+
         UserInfo loginUser=null;
-        UserInfoExample example=new UserInfoExample();
+
         example.or().andAccountEqualTo(userInfo.getAccount());
         List<UserInfo> userInfos=this.userInfoService.selectByExample(example);
         if(userInfos.size()==1){
