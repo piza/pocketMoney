@@ -1,23 +1,30 @@
 package com.piza.controller.portal;
 
-import com.piza.controller.BaseController;
 import com.piza.enums.ErrorTypeEnum;
+import com.piza.model.UserInfo;
+import com.piza.model.UserInfoExample;
+import com.piza.service.UserInfoService;
 import com.piza.util.DateUtil;
+import com.piza.util.ServletUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Peter on 15/9/20.
@@ -26,11 +33,9 @@ import java.util.Map;
 @Controller
 public class IndexController extends BaseController{
 
-    @RequestMapping("/index")
-    public ModelAndView index( ModelAndView mav) {
-        mav.setViewName("index");
-        return mav;
-    }
+
+    @Autowired
+    private UserInfoService userInfoService;
 
     @RequestMapping(value = "background", method = RequestMethod.GET)
     @ResponseBody
@@ -63,5 +68,43 @@ public class IndexController extends BaseController{
         }catch (Exception e){
             return "";
         }
+    }
+
+    @RequestMapping(value = "needlogin")
+    @ResponseBody
+    public Map<String,Object> needlogin() {
+        return this.failedResult(ErrorTypeEnum.NEED_LOGIN,"请登录!");
+    }
+
+    @RequestMapping(value = "login",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> login(HttpServletRequest request,HttpServletResponse httpServletResponse,@RequestBody UserInfo userInfo) {
+
+        if(StringUtils.isEmpty(userInfo.getAccount())|| StringUtils.isEmpty(userInfo.getPassword())){
+            return this.failedResult(ErrorTypeEnum.VALIDATE_ERROR,"参数错误!");
+        }
+        UserInfo loginUser=null;
+        UserInfoExample example=new UserInfoExample();
+        example.or().andAccountEqualTo(userInfo.getAccount());
+        List<UserInfo> userInfos=this.userInfoService.selectByExample(example);
+        if(userInfos.size()==1){
+            loginUser=userInfos.get(0);
+            if(loginUser.getPassword().equals(userInfo.getPassword())){
+                loginUser.setCurrentToken(UUID.randomUUID().toString());
+                loginUser.setLastLoginTime(new Date());
+                loginUser.setLastLoginIp(ServletUtil.getClientIpAddr(request));
+                this.userInfoService.updateByPrimaryKeySelective(loginUser);
+
+                Cookie cookie = new Cookie("token", loginUser.getCurrentToken());
+                cookie.setMaxAge(604800);
+                cookie.setPath("/");
+                httpServletResponse.addCookie(cookie);
+            }else{
+                return this.failedResult(ErrorTypeEnum.VALIDATE_ERROR,"密码错误!");
+            }
+        }else{
+            return this.failedResult(ErrorTypeEnum.VALIDATE_ERROR,"用户不存在!");
+        }
+        return successResult(loginUser);
     }
 }

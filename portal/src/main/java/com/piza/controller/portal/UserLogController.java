@@ -1,12 +1,10 @@
-package com.piza.controller;
+package com.piza.controller.portal;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 
 import com.piza.enums.ErrorTypeEnum;
-import com.piza.enums.NormalStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,71 +12,70 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import com.piza.bean.PagingProperties;
 
-import com.piza.model.Authority;
-import com.piza.model.AuthorityExample;
-import com.piza.service.AuthorityService;
-import com.piza.validator.AuthorityValidator;
+import com.piza.model.UserLog;
+import com.piza.model.UserLogExample;
+import com.piza.service.UserLogService;
+import com.piza.validator.UserLogValidator;
 
 
 
 @Controller
-@RequestMapping("/authority")
-public class AuthorityController extends BaseController {
+@RequestMapping("/userLog")
+public class UserLogController extends BaseController {
 
     @Autowired
-    private AuthorityService authorityService;
+    private UserLogService userLogService;
 
-    @InitBinder(value = "authority")
+    @InitBinder(value = "userLog")
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new AuthorityValidator());
+        binder.setValidator(new UserLogValidator());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> insert(@Valid @RequestBody Authority authority, BindingResult result) {
+    public Map<String, Object> insert(@Valid @RequestBody UserLog userLog, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        authority.setCreateDate(new Date());
-        authorityService.insert(authority);
-        return successResult(authority);
+        userLogService.insert(userLog);
+        return successResult(userLog);
     }
 
 //    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 //    @ResponseBody
 //    public Map<String, Object> delete(@PathVariable("id") Integer id) {
-//        Authority delete = new Authority();
+//        UserLog delete = new UserLog();
 //        delete.setId(id);
 //        delete.setStatus(NormalStatusEnum.DELETED.getValue());
-//        authorityService.updateByPrimaryKeySelective(delete);
+//        userLogService.updateByPrimaryKeySelective(delete);
 //        return successResult("Ok");
 //    }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
-        AuthorityExample exam = new AuthorityExample();
+        UserLogExample exam = new UserLogExample();
         if(paging.getNeedPaging()) {
-            paging.setTotal(authorityService.countByExample(exam));
+            paging.setTotal(userLogService.countByExample(exam));
             exam.setOrderByClause(" id desc " + paging.build());
         }
-        List<Authority> list = authorityService.selectByExample(exam);
+        List<UserLog> list = userLogService.selectByExample(exam);
         return successPageList(paging,list);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> get(@PathVariable("id") Integer id) {
-        return successResult(authorityService.selectByPrimaryKey(id));
+        return successResult(userLogService.selectByPrimaryKey(id));
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody Authority authority, BindingResult result) {
+    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody UserLog userLog, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        authorityService.updateByPrimaryKeySelective(authority);
+        userLogService.updateByPrimaryKeySelective(userLog);
         return successResult("ok");
     }
 

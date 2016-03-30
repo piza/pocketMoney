@@ -5,7 +5,8 @@ package com.piza.enums;
  */
 public enum ErrorTypeEnum {
     SERVER_ERROR(1),
-    VALIDATE_ERROR(2)
+    VALIDATE_ERROR(2),
+    NEED_LOGIN(3)
     ;
 
     private Integer value;

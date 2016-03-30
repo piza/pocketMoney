@@ -1,4 +1,4 @@
-package com.piza.controller;
+package com.piza.controller.portal;
 
 import java.util.List;
 import java.util.Map;

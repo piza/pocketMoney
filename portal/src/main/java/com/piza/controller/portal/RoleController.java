@@ -1,4 +1,4 @@
-package com.piza.controller;
+package com.piza.controller.portal;
 
 import java.util.List;
 import java.util.Map;
@@ -13,70 +13,70 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import com.piza.bean.PagingProperties;
 
-import com.piza.model.DailyNote;
-import com.piza.model.DailyNoteExample;
-import com.piza.service.DailyNoteService;
-import com.piza.validator.DailyNoteValidator;
+import com.piza.model.Role;
+import com.piza.model.RoleExample;
+import com.piza.service.RoleService;
+import com.piza.validator.RoleValidator;
 
 
 
 @Controller
-@RequestMapping("/dailyNote")
-public class DailyNoteController extends BaseController {
+@RequestMapping("/role")
+public class RoleController extends BaseController {
 
     @Autowired
-    private DailyNoteService dailyNoteService;
+    private RoleService roleService;
 
-    @InitBinder(value = "dailyNote")
+    @InitBinder(value = "role")
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new DailyNoteValidator());
+        binder.setValidator(new RoleValidator());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> insert(@Valid @RequestBody DailyNote dailyNote, BindingResult result) {
+    public Map<String, Object> insert(@Valid @RequestBody Role role, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        dailyNoteService.insert(dailyNote);
-        return successResult(dailyNote);
+        roleService.insert(role);
+        return successResult(role);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public Map<String, Object> delete(@PathVariable("id") Integer id) {
-        DailyNote delete = new DailyNote();
+        Role delete = new Role();
         delete.setId(id);
         delete.setStatus(NormalStatusEnum.DELETED.getValue());
-        dailyNoteService.updateByPrimaryKeySelective(delete);
+        roleService.updateByPrimaryKeySelective(delete);
         return successResult("Ok");
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> list(PagingProperties paging) {
-        DailyNoteExample exam = new DailyNoteExample();
+        RoleExample exam = new RoleExample();
         if(paging.getNeedPaging()) {
-            paging.setTotal(dailyNoteService.countByExample(exam));
+            paging.setTotal(roleService.countByExample(exam));
             exam.setOrderByClause(" id desc " + paging.build());
         }
-        List<DailyNote> list = dailyNoteService.selectByExample(exam);
+        List<Role> list = roleService.selectByExample(exam);
         return successPageList(paging,list);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> get(@PathVariable("id") Integer id) {
-        return successResult(dailyNoteService.selectByPrimaryKey(id));
+        return successResult(roleService.selectByPrimaryKey(id));
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody DailyNote dailyNote, BindingResult result) {
+    public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody Role role, BindingResult result) {
         if (result.hasErrors()) {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
-        dailyNoteService.updateByPrimaryKeySelective(dailyNote);
+        roleService.updateByPrimaryKeySelective(role);
         return successResult("ok");
     }
 

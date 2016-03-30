@@ -1,4 +1,4 @@
-package com.piza.controller;
+package com.piza.controller.portal;
 
 import java.util.List;
 import java.util.Map;
@@ -66,7 +66,17 @@ public class UserInfoController extends BaseController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> get(@PathVariable("id") Integer id) {
+    public Map<String, Object> get(@PathVariable("id") Integer id,@RequestParam(required = false) String currentToken) {
+        if(currentToken!=null){
+            UserInfoExample userInfoExample=new UserInfoExample();
+            userInfoExample.or().andCurrentTokenEqualTo(currentToken);
+            List<UserInfo> userInfoList=this.userInfoService.selectByExample(userInfoExample);
+            if(userInfoList.size()>0){
+                return successResult(userInfoList.get(0));
+            }else{
+                return this.failedResult(ErrorTypeEnum.NEED_LOGIN,"请重新登录");
+            }
+        }
         return successResult(userInfoService.selectByPrimaryKey(id));
     }
 

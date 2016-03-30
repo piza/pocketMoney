@@ -1,4 +1,4 @@
-package com.piza.controller;
+package com.piza.controller.portal;
 
 import com.piza.bean.ErrorBean;
 import com.piza.bean.PagingProperties;
