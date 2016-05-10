@@ -17,6 +17,7 @@
 	<context:component-scan base-package="com.piza.service" />
     <context:component-scan base-package="com.piza.listener" />
     <context:component-scan base-package="com.piza.util" />
+    <context:component-scan base-package="com.piza.task" />
 
     <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
