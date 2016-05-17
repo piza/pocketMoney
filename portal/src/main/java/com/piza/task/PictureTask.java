@@ -41,7 +41,7 @@ public class PictureTask {
             dailyPicture.setAlt(imgEl.attr("alt"));
             dailyPicture.setPublishTime(this.getText(htmlDoc,".article_text .publication_time"));
             dailyPicture.setTitle(this.getText(htmlDoc,".article_text h2"));
-            dailyPicture.setDescription(this.getText(htmlDoc,".article_text [dir=ltr] span"));
+            dailyPicture.setDescription(this.getText(htmlDoc,".article_text  #caption p:eq(2)"));
             dailyPicture.setCreateDate(new Date());
             this.dailyPictureService.insert(dailyPicture);
         } catch (IOException e) {
