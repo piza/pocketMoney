@@ -27,21 +27,24 @@ public class PictureTask {
 
     /**
      * 尝试抓取
+     *
      * @param tryTime 尝试次数,不超过三次
      */
-    public void tryCrawPicture(int tryTime){
-        if(tryTime>=3){
+    public void tryCrawPicture(int tryTime) {
+        if (tryTime >= 3) {
             return;
         }
-        DailyPicture dailyPicture=new DailyPicture();
+        DailyPicture dailyPicture = new DailyPicture();
         try {
-            Document htmlDoc= Jsoup.connect("http://photography.nationalgeographic.com/photography/photo-of-the-day").get();
-            Element imgEl=htmlDoc.select(".primary_photo img").get(0);
+            Document htmlDoc = Jsoup.connect("http://photography.nationalgeographic.com/photography/photo-of-the-day").get();
+            Element imgEl = htmlDoc.select(".primary_photo img").get(0);
             dailyPicture.setOriginUrl(imgEl.attr("src"));
             dailyPicture.setAlt(imgEl.attr("alt"));
-            dailyPicture.setPublishTime(this.getText(htmlDoc,".article_text .publication_time"));
-            dailyPicture.setTitle(this.getText(htmlDoc,".article_text h2"));
-            dailyPicture.setDescription(this.getText(htmlDoc,".article_text  #caption p:eq(2)"));
+            dailyPicture.setPublishTime(this.getText(htmlDoc, ".article_text .publication_time"));
+            dailyPicture.setTitle(this.getText(htmlDoc, ".article_text h2"));
+            String desc=this.getText(htmlDoc, ".article_text  #caption p:eq(2)");
+            String desc2=this.getText(htmlDoc, ".article_text  #caption p:eq(3)");
+            dailyPicture.setDescription(desc+"<br>"+desc2);
             dailyPicture.setCreateDate(new Date());
             this.dailyPictureService.insert(dailyPicture);
         } catch (IOException e) {
@@ -50,17 +53,24 @@ public class PictureTask {
         }
     }
 
-    @Scheduled(cron="0 0 8 * * ?")
+    @Scheduled(cron = "0 0 8 * * ?")
 //@Scheduled(cron="0 15 17 * * ?")
-public void crawPicture(){
+    public void crawPicture() {
         tryCrawPicture(0);
     }
 
-    private String getText(Document htmlDoc,String slt){
-        try{
-            return htmlDoc.select(slt).get(0).text();
-        }catch (Exception e){
+    private String getText(Document htmlDoc, String slt) {
+        try {
+            String str= htmlDoc.select(slt).get(0).text();
+            return str == null? "":str;
+        } catch (Exception e) {
             return "";
         }
+    }
+
+
+    public static void main(String[] args) {
+        PictureTask pt=new PictureTask();
+        pt.tryCrawPicture(2);
     }
 }
