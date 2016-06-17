@@ -69,8 +69,8 @@ public class PictureTask {
     }
 
 
-    public static void main(String[] args) {
-        PictureTask pt=new PictureTask();
-        pt.tryCrawPicture(2);
-    }
+//    public static void main(String[] args) {
+//        PictureTask pt=new PictureTask();
+//        pt.tryCrawPicture(2);
+//    }
 }
