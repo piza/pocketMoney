@@ -552,6 +552,14 @@
             <artifactId>lucene-analyzers-smartcn</artifactId>
             <version>${org.lucene.version}</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
