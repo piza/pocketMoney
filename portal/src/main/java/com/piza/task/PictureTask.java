@@ -1,6 +1,8 @@
 package com.piza.task;
 
 import com.piza.enums.ErrorTypeEnum;
+import com.piza.enums.IndexTypeEnum;
+import com.piza.events.AddIndexEvent;
 import com.piza.model.DailyPicture;
 import com.piza.service.DailyPictureService;
 import com.piza.util.DateUtil;
@@ -8,6 +10,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +27,8 @@ public class PictureTask {
     @Autowired
     private DailyPictureService dailyPictureService;
 
+    @Autowired
+    private ApplicationContext applicationContext;
 
     /**
      * 尝试抓取
@@ -47,6 +52,12 @@ public class PictureTask {
             dailyPicture.setDescription(desc+"<br>"+desc2);
             dailyPicture.setCreateDate(new Date());
             this.dailyPictureService.insert(dailyPicture);
+            AddIndexEvent addIndexEvent=new AddIndexEvent(this);
+            addIndexEvent.setIndexTypeEnum(IndexTypeEnum.DB_DATA);
+            addIndexEvent.setDbId(dailyPicture.getId());
+            addIndexEvent.setType("dailyPicture");
+            addIndexEvent.setTextContent(dailyPicture.getDescription());
+            applicationContext.publishEvent(addIndexEvent);
         } catch (IOException e) {
             e.printStackTrace();
             tryCrawPicture(tryTime++);

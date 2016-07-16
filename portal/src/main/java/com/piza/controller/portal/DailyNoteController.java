@@ -5,8 +5,11 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import com.piza.enums.ErrorTypeEnum;
+import com.piza.enums.IndexTypeEnum;
 import com.piza.enums.NormalStatusEnum;
+import com.piza.events.AddIndexEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -26,6 +29,8 @@ public class DailyNoteController extends BaseController {
 
     @Autowired
     private DailyNoteService dailyNoteService;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @InitBinder(value = "dailyNote")
     public void initBinder(WebDataBinder binder) {
@@ -39,6 +44,12 @@ public class DailyNoteController extends BaseController {
             return failedResult(ErrorTypeEnum.VALIDATE_ERROR, result.getAllErrors().get(0).getDefaultMessage());
         }
         dailyNoteService.insert(dailyNote);
+        AddIndexEvent addIndexEvent=new AddIndexEvent(this);
+        addIndexEvent.setIndexTypeEnum(IndexTypeEnum.DB_DATA);
+        addIndexEvent.setDbId(dailyNote.getId());
+        addIndexEvent.setType("dailyNote");
+        addIndexEvent.setTextContent(dailyNote.getContent());
+        applicationContext.publishEvent(addIndexEvent);
         return successResult(dailyNote);
     }
 
